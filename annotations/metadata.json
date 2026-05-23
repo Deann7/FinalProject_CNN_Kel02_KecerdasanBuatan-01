@@ -1,0 +1,20 @@
+{
+    "metadata_version": "1.0",
+    "timestamp": "2026-05-20 23:36:48",
+    "dataset_name": "NTHU-DDD",
+    "total_images": 66521,
+    "num_classes_total": 5,
+    "num_object_classes": 4,
+    "classes": {
+        "notdrowsy": 1,
+        "sleepyCombination": 2,
+        "slowBlinkWithNodding": 3,
+        "yawning": 4
+    },
+    "image_size": 640,
+    "model_architecture": "fasterrcnn_resnet50_fpn",
+    "seed": 42,
+    "batch_size": 4,
+    "score_threshold": 0.5,
+    "nms_threshold": 0.4
+}
