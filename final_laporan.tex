@@ -477,12 +477,75 @@ Pada eksperimen ini, dataset yang digunakan adalah \textit{National Tsing Hua Un
 
 Dataset ini dirancang secara khusus untuk merepresentasikan skenario berkendara di dunia nyata yang kompleks, dengan variasi meliputi: (1) kondisi pencahayaan siang hari dan malam hari (inframerah/NIR); (2) penggunaan aksesoris berupa kacamata biasa, kacamata hitam, dan tanpa kacamata; serta (3) keragaman subjek pengemudi dari berbagai karakteristik wajah.
 
-Langkah pra-pemrosesan yang dilakukan mencakup ekstraksi \textit{bounding box} otomatis menggunakan teknik \textit{HSV Masking}. Posisi wajah pengemudi pada dataset ditandai dengan kotak berwarna (hijau, merah, atau biru), sehingga \textit{masking} dilakukan untuk mengambil koordinat ujung $(x_1, y_1, x_2, y_2)$ dari kotak tersebut. Seluruh gambar kemudian di-\textit{resize} ke resolusi $640 \times 640$ piksel. Pembagian data dilakukan dengan proporsi 75\% untuk \textit{training}, 15\% untuk \textit{validation}, dan 10\% untuk \textit{testing}. Untuk memastikan reprodusibilitas hasil, \textit{random seed} diatur pada nilai \textbf{42}.
-\end{sloppypar}
+Gambar \ref{fig:contoh-dataset} memperlihatkan tiga contoh sampel \textit{image} dari kelas yang berbeda yang digunakan dalam \textit{training}.
 
-\begin{table}[h!]
+\begin{figure}[!ht]
 \centering
-\caption{Pembagian dataset}
+
+\begin{minipage}{0.28\textwidth}
+\centering
+\fbox{
+\includegraphics[
+    width=0.95\linewidth,
+    height=3cm,
+    keepaspectratio
+    ]{images/001_glasses_nonsleepyCombination_1014_notdrowsy.jpg}
+}
+\caption*{a) \texttt{notdrowsy}}
+\end{minipage}
+\hfill
+\begin{minipage}{0.28\textwidth}
+\centering
+\fbox{
+\includegraphics[
+    width=0.95\linewidth,
+    height=3cm,
+    keepaspectratio
+    ]{images/001_glasses_sleepyCombination_1002_drowsy.jpg}
+}
+\caption*{b) \texttt{sleepyCombination}}
+\end{minipage}
+\hfill
+\begin{minipage}{0.28\textwidth}
+\centering
+\fbox{
+\includegraphics[
+    width=0.95\linewidth,
+    height=3cm,
+    keepaspectratio
+    ]{images/001_glasses_yawning_1001_drowsy.jpg}
+}
+\caption*{c) \texttt{yawning}}
+\end{minipage}
+
+\caption{Contoh 3 sampel dataset NTHU-DDD dari kelas yang berbeda}
+\label{fig:contoh-dataset}
+
+\end{figure}
+
+Langkah \textit{pre-processing} yang dilakukan adalah ekstraksi \textit{bounding box} otomatis menggunakan teknik \textit{HSV Masking}. Karena posisi wajah pengemudi pada dataset ditandai dengan kotak berwarna (hijau, merah, atau biru), \textit{masking} dilakukan untuk mengambil koordinat ujung (x1, y1, x2, y2) dari kotak tersebut. Gambar kemudian diubah ukurannya (\textit{resize}) menjadi resolusi $640 \times 640$ piksel. Pembagian data dilakukan dengan proporsi 75\% untuk \textit{training}, 15\% untuk \textit{validation}, dan 10\% untuk \textit{testing}. Untuk memastikan hasil yang konsisten saat diulang, \textit{random seed} diatur pada nilai 42.
+
+\end{sloppypar} %
+
+% \begin{table}[htbp]
+% \centering
+% \caption{Pembagian dataset}
+% \label{tab:split-data}
+% \begin{tabular}{lrr}
+% \toprule
+% \textbf{Subset} & \textbf{Jumlah Sampel} & \textbf{Rasio (\%)} \\
+% \midrule
+% Training   & 49.890 & 75\% \\
+% Validation & 9.978 & 15\% \\
+% Test       & 6.653 & 10\% \\
+% \midrule
+% \textbf{Total} & \textbf{66.521} & \textbf{100\%} \\
+% \bottomrule
+% \end{tabular}
+% \end{table}
+
+\begin{center}
+\captionof{table}{Pembagian dataset} 
 \label{tab:split-data}
 \begin{tabular}{lrr}
 \toprule
@@ -495,11 +558,12 @@ Test       & 6.653 & 10\% \\
 \textbf{Total} & \textbf{66.521} & \textbf{100\%} \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{center} %
+
 
 \section{Konfigurasi Eksperimen}
 
-Sistem VisionGuard dilatih menggunakan arsitektur Faster R-CNN dengan \textit{backbone} ResNet-50 FPN dan bobot awal (\textit{pre-trained weights}) dari dataset COCO \cite{lin2014coco}. Lingkungan eksperimen dijalankan menggunakan \textit{framework} PyTorch (v2.2.2) dan Torchvision (v0.17.2) pada Google Colab dengan GPU Tesla T4 (VRAM 15,6 GB). Pustaka tambahan yang digunakan meliputi OpenCV (v4.10) untuk pemrosesan gambar dan Albumentations (v1.4) untuk \textit{data augmentation}. Tabel~\ref{tab:hyperparam} menyajikan konfigurasi \textit{hyperparameter} yang digunakan selama proses pelatihan model.
+Sistem \textit{Vision Guard} dilatih menggunakan arsitektur Faster R-CNN dengan \textit{backbone} ResNet-50 FPN dan bobot awal (\textit{pre-trained weights}) dari dataset COCO. Lingkungan eksperimen dijalankan menggunakan \textit{framework} PyTorch dan Torchvision pada Google Colab menggunakan GPU Tesla T4 (VRAM 15.6 GB). Tabel \ref{tab:hyperparam} menyajikan nilai \textit{hyperparameter} yang digunakan selama proses pembuatan model. \textit{Library} tambahan yang digunakan meliputi OpenCV (v4.10) untuk pemrosesan gambar dan Albumentations (v1.4) untuk \textit{data augmentation}.
 
 \begin{table}[h!]
 \centering
@@ -510,13 +574,13 @@ Sistem VisionGuard dilatih menggunakan arsitektur Faster R-CNN dengan \textit{ba
 \textbf{Hyperparameter} & \textbf{Nilai} \\
 \midrule
 Arsitektur Model & Faster R-CNN (ResNet-50 FPN) \\
-Learning rate    & 0,005 \\
+Learning rate    & 0.005 \\
 Batch size       & 4 \\
 Epoch Maksimal   & 20 \\
-Optimizer        & SGD (Momentum = 0,9; Weight Decay = $5\times10^{-4}$) \\
-Scheduler        & StepLR (Step Size = 7, Gamma = 0,1) \\
-Score Threshold  & 0,5 \\
-NMS Threshold    & 0,4 \\
+Optimizer        & SGD (Momentum = 0.9, Weight Decay = $5\times10^{-4}$) \\
+Scheduler        & StepLR (Step Size = 7, Gamma = 0.1) \\
+Score Threshold  & 0.5 \\
+NMS Threshold    & 0.4 \\
 Random seed      & 42 \\
 \bottomrule
 \end{tabular}
@@ -524,7 +588,7 @@ Random seed      & 42 \\
 
 \section{Metrik Evaluasi}
 
-Metrik evaluasi yang digunakan adalah \textit{Mean Average Precision} (mAP) yang dihitung menggunakan pustaka \texttt{torchmetrics}. mAP dipilih karena merupakan metrik standar untuk tugas \textit{object detection} yang mengukur akurasi klasifikasi kelas perilaku sekaligus mengukur seberapa akurat posisi \textit{bounding box} yang diprediksi dibandingkan dengan \textit{ground truth} melalui perhitungan \textit{Intersection over Union} (IoU). Evaluasi difokuskan pada dua varian:
+Metrik evaluasi yang digunakan adalah \textit{Mean Average Precision} (mAP) yang dihitung menggunakan \textit{library} \texttt{torchmetrics}. mAP dipilih karena merupakan metrik standar untuk tugas \textit{object detection} yang mengukur akurasi klasifikasi kelas perilaku sekaligus mengukur seberapa akurat posisi \textit{bounding box} yang diprediksi dibandingkan dengan \textit{ground truth} melalui perhitungan \textit{Intersection over Union} (IoU). Evaluasi difokuskan pada dua varian:
 
 \begin{itemize}[leftmargin=*]
     \item \textbf{mAP@0.50:} mAP pada \textit{IoU threshold} tunggal sebesar 0,50, yang mengukur akurasi deteksi dengan toleransi lokalisasi yang lebih longgar.
@@ -535,7 +599,7 @@ Pemilihan mAP dibandingkan metrik klasifikasi biasa (akurasi, F1-score) didasark
 
 \section{Hasil Kuantitatif}
 
-Eksperimen menunjukkan bahwa proses \textit{training} model berjalan dengan konvergensi yang baik. Evaluasi dilakukan pada setiap \textit{epoch} terhadap \textit{validation set}. Model terbaik diperoleh pada Epoch ke-3 dengan nilai mAP \textit{validation} sebesar 0,8785. Ketika model terbaik ini diuji menggunakan \textit{test set} (6.653 gambar), model menghasilkan nilai mAP@[0.5:0.95] sebesar \textbf{0,8749} dan mAP@0.50 sebesar \textbf{0,9343}.
+Eksperimen menunjukkan bahwa proses \textit{training} model berjalan dengan baik. Evaluasi dilakukan pada setiap \textit{epoch} terhadap \textit{validation set}. Model terbaik didapatkan pada Epoch ke-3 dengan nilai mAP \textit{validation} sebesar 0.8785. Ketika model terbaik ini diuji menggunakan \textit{Test Set} (6.653 gambar), model menghasilkan nilai mAP@0.5:0.95 sebesar 0.8749 dan mAP@0.50 sebesar 0.9343.
 
 \begin{table}[h!]
 \centering
@@ -554,7 +618,7 @@ Epoch 5     & 0,8714 & -- \\
 \end{tabular}
 \end{table}
 
-Berdasarkan performa per kelas pada \textit{test set}, kelas \texttt{sleepyCombination} memperoleh skor mAP tertinggi sebesar 0,9175, diikuti oleh \texttt{yawning} (0,8680), \texttt{slowBlinkWithNodding} (0,8572), dan \texttt{notdrowsy} (0,8568). Tingginya skor pada kelas \texttt{sleepyCombination} disebabkan oleh fitur visual yang sangat khas berupa mata yang tertutup sepenuhnya, sementara kelas \texttt{notdrowsy} memiliki skor terendah karena kemiripan visual dengan \texttt{slowBlinkWithNodding} pada \textit{frame} tunggal.
+Jika dilihat berdasarkan performa per kelas pada \textit{Test Set}, kelas \texttt{sleepyCombination} mendapatkan skor mAP tertinggi sebesar 0.9175, diikuti oleh \texttt{yawning} (0.8680), \texttt{slowBlinkWithNodding} (0.8572), dan \texttt{notdrowsy} (0.8568).Tingginya skor pada kelas \texttt{sleepyCombination} disebabkan oleh fitur visual yang sangat khas berupa mata yang tertutup sepenuhnya, sementara kelas \texttt{notdrowsy} memiliki skor terendah karena kemiripan visual dengan \texttt{slowBlinkWithNodding} pada \textit{frame} tunggal.
 
 \section{Analisis \textit{Hyperparameter Tuning}}
 
@@ -570,10 +634,10 @@ Penggunaan bobot \textit{pre-trained} COCO (\textit{transfer learning}) membantu
 
 \section{Hasil Kualitatif \& \textit{Error Analysis}}
 
-Secara kualitatif, model mampu mendeteksi letak wajah pengemudi serta mengklasifikasikan ekspresi \textit{yawning} dan \textit{sleepyCombination} dengan akurat karena adanya fitur visual yang jelas seperti bentuk mulut terbuka lebar atau posisi kepala tertunduk. Namun, terdapat beberapa jenis kesalahan (\textit{error}) yang teridentifikasi:
+Secara kualitatif, model mampu mendeteksi letak wajah pengemudi serta mengklasifikasikan ekspresi \textit{yawning} dan \textit{sleepyCombination} dengan akurat karena adanya fitur visual yang jelas seperti bentuk mulut terbuka lebar atau posisi kepala tertunduk. Namun, terdapat beberapa jenis \textit{error} yang teridentifikasi:
 
 \begin{enumerate}[leftmargin=*]
-    \item \textbf{Kesalahan klasifikasi antara \textit{Not Drowsy} dan \textit{Slow Blink with Nodding}:} Gambar pada kelas \texttt{notdrowsy} terkadang diprediksi sebagai \texttt{slowBlinkWithNodding}. Hal ini terjadi karena gerakan kedipan mata normal yang tidak sengaja terekam pada satu \textit{frame} tunggal dianggap oleh model sebagai kondisi mata tertutup akibat mengantuk. Tanpa konteks temporal, model tidak dapat membedakan durasi kedipan.
+    \item \textbf{Kesalahan klasifikasi antara \textit{Not Drowsy} dan \textit{Slow Blink with Nodding}:} Gambar pada kelas \texttt{notdrowsy} terkadang diprediksi sebagai \texttt{slowBlinkWithNodding}. Hal ini terjadi karena gerakan kedipan mata normal yang tidak sengaja terekam pada satu \textit{frame} dianggap oleh model sebagai kondisi mata tertutup akibat mengantuk. Tanpa konteks temporal, model tidak dapat membedakan durasi kedipan.
     \item \textbf{\textit{False positives} pada pencahayaan rendah:} Pada beberapa kondisi gambar malam hari yang sangat gelap, objek di latar belakang yang memiliki warna atau tekstur menyerupai kulit wajah terkadang ikut terdeteksi secara keliru sebagai \textit{Region of Interest}.
     \item \textbf{Deteksi ganda pada area wajah:} Pada sebagian kecil gambar, model menghasilkan dua \textit{bounding box} yang saling tumpang tindih pada wajah yang sama dengan label kelas yang berbeda. Masalah ini dimitigasi dengan pengaturan \textit{NMS threshold} pada 0,4.
 \end{enumerate}
@@ -586,7 +650,7 @@ Hasil eksperimen ini menjawab seluruh rumusan masalah yang diajukan pada Bab I. 
 
 Jika dibandingkan dengan literatur, performa model VisionGuard menunjukkan hasil yang kompetitif. Weng et al. \cite{weng2017driver} mencapai akurasi 85\% pada NTHU-DDD menggunakan Hierarchical Temporal DBN, namun tanpa kemampuan lokalisasi spasial. Ed-Doughmi et al. \cite{ed2020deep} mencapai akurasi 90\% dengan CNN+RNN, tetapi dengan kompleksitas komputasi yang lebih tinggi. VisionGuard menawarkan \textit{tradeoff} yang lebih baik dengan menyediakan lokalisasi spasial eksplisit melalui \textit{bounding box} sekaligus akurasi klasifikasi yang tinggi.
 
-Keterbatasan utama dari eksperimen ini adalah model hanya bekerja pada \textit{frame} gambar mandiri (fitur spasial 2D) sehingga tidak dapat menganalisis durasi dari suatu gerakan (fitur temporal). Selain itu, evaluasi hanya dilakukan pada satu dataset (NTHU-DDD), sehingga generalisasi model terhadap dataset lain belum dapat diukur. Meskipun demikian, performa deteksi yang dihasilkan sudah sangat memadai sebagai dasar pengembangan sistem keselamatan berkendara.
+Keterbatasan utama dari eksperimen ini adalah model hanya bekerja pada frame gambar mandiri (fitur spasial 2D) sehingga tidak dapat melihat durasi dari suatu gerakan (fitur temporal). Selain itu, evaluasi hanya dilakukan pada satu dataset (NTHU-DDD), sehingga generalisasi model terhadap dataset lain belum dapat diukur. Meskipun demikian, performa deteksi yang dihasilkan sudah sangat memadai sebagai dasar pengembangan sistem keselamatan berkendara.
 
 \section{Analisis Etika, Bias, \& Keterbatasan}
 
@@ -620,72 +684,85 @@ Dataset NTHU-DDD memiliki beberapa keterbatasan yang berpotensi menimbulkan bias
 \chapter{PEMBAGIAN TUGAS \& DEKLARASI KONTRIBUSI INDIVIDUAL}
 \label{bab:kontribusi}
 
-\begin{petunjuk}
-\textbf{BAB INI WAJIB DITULIS SECARA MANDIRI OLEH MASING-MASING ANGGOTA} (bukan oleh ketua kelompok). Isi Sub-bab ini akan digunakan untuk men-generate pertanyaan ujian lisan yang personal. Klaim penguasaan konsep per anggota dideklarasikan dalam berkas \texttt{metadata.json} (field \texttt{konsep\_dikuasai\_*}) yang merupakan bagian tidak terpisahkan dari laporan ini.
-
-Gandakan template di bawah untuk setiap anggota (3--4 orang).
-\end{petunjuk}
-
-\section{[Nama Anggota 1] -- NPM. [xxxxxxxxxx]}
+\section{Benedict Aurelius -- NPM. 2306209095}
 
 \subsection*{IV.1.1 Komponen yang Dikerjakan}
 Daftar konkret bagian proyek yang menjadi tanggung jawab penuh saya:
 \begin{itemize}[leftmargin=*]
-    \item \textbf{Kode/modul:} [mis. \texttt{src/preprocessing/}, fungsi \texttt{train\_step()} di \texttt{src/train.py}]
-    \item \textbf{Bagian arsitektur:} [mis. \textit{attention layer}, \textit{replay buffer}, konstruksi graf]
-    \item \textbf{Bagian analisis:} [mis. \textit{confusion matrix}, \textit{ablation study}]
-    \item \textbf{Bagian laporan:} [mis. Bab II.3, Bab III.4]
+    \item \textbf{Kode/modul:} Menyusun \textit{training loop} utama pada PyTorch, mengonfigurasi \textit{optimizer} (SGD), dan mengimplementasikan \textit{learning rate scheduler} (\texttt{StepLR}).
+    \item \textbf{Bagian arsitektur:} Inisialisasi arsitektur Faster R-CNN dengan \textit{backbone} ResNet-50 FPN, memuat \textit{pre-trained weights} COCO, serta menyesuaikan \textit{classifier head} untuk 4 kelas target.
+    \item \textbf{Bagian analisis:} Analisis konvergensi \textit{loss} selama proses \textit{training} dan eksperimen \textit{hyperparameter tuning} untuk menentukan \textit{epoch} yang optimal.
+    \item \textbf{Bagian laporan:} Menyusun Bab II (Pendekatan AI) khususnya bagian landasan teori dan justifikasi ilmiah arsitektur.
 \end{itemize}
 
 \subsection*{IV.1.2 Pernyataan Penggunaan AI \textit{Assistant}}
 \begin{itemize}[leftmargin=*]
-    \item \textbf{Tool yang dipakai:} [mis. ChatGPT 5.1, Claude Opus 4.7, GitHub Copilot; sebutkan tool \& versi]
-    \item \textbf{Untuk bagian apa:} [mis. \textit{debugging} CUDA OOM, \textit{drafting} paragraf \textit{related work}, eksplorasi ide]
-    \item \textbf{Tingkat ketergantungan:} [rendah / sedang / tinggi] (estimasi $\sim$[X]\% output berasal dari AI)
+    \item \textbf{Tool yang dipakai:} Gemini.
+    \item \textbf{Untuk bagian apa:} \textit{Debugging} kode PyTorch/framework saat proses \textit{training} dan pemecahan \textit{error}, serta \textit{review} dokumentasi teknis Faster R-CNN.
+    \item \textbf{Tingkat ketergantungan:} Rendah - Sedang (estimasi $\sim$20\% output berasal dari AI).
     \item \textbf{Pernyataan:} Saya memahami dan dapat mempertanggungjawabkan setiap baris kode/teks yang saya klaim sebagai bagian saya.
 \end{itemize}
 
-%-------------------- Anggota 2 (gandakan blok di atas) ----------------------
-\section{[Nama Anggota 2] -- NPM. [xxxxxxxxxx]}
+%-------------------- Anggota 2 ---------------------------------------------
+\section{Deandro Najwan Ahmad Syahbanna -- NPM. 2306213174}
 
 \subsection*{IV.2.1 Komponen yang Dikerjakan}
+Daftar konkret bagian proyek yang menjadi tanggung jawab penuh saya:
 \begin{itemize}[leftmargin=*]
-    \item \textbf{Kode/modul:} [\ldots]
-    \item \textbf{Bagian arsitektur:} [\ldots]
-    \item \textbf{Bagian analisis:} [\ldots]
-    \item \textbf{Bagian laporan:} [\ldots]
+    \item \textbf{Kode/modul:} Mengembangkan skrip pra-pemrosesan data, termasuk otomatisasi ekstraksi \textit{bounding box} menggunakan algoritma \textit{HSV Masking} dari gambar mentah.
+    \item \textbf{Bagian arsitektur:} Membuat \textit{custom dataset pipeline} pada PyTorch (Dataloader) agar gambar dan anotasi \textit{bounding box} dapat diproses oleh model dalam format \textit{batch}.
+    \item \textbf{Bagian analisis:} Menganalisis distribusi kelas pada dataset NTHU-DDD dan memastikan pembagian subset \textit{training, validation,} dan \textit{testing} berjalan proporsional (75:15:10).
+    \item \textbf{Bagian laporan:} Menulis draf utama untuk Bab I (Pendahuluan) dan Bab V (Kesimpulan \& Pekerjaan Lanjutan).
 \end{itemize}
 
 \subsection*{IV.2.2 Pernyataan Penggunaan AI \textit{Assistant}}
 \begin{itemize}[leftmargin=*]
-    \item \textbf{Tool yang dipakai:} [\ldots]
-    \item \textbf{Untuk bagian apa:} [\ldots]
-    \item \textbf{Tingkat ketergantungan:} [\ldots]
+    \item \textbf{Tool yang dipakai:} Gemini.
+    \item \textbf{Untuk bagian apa:} Pencarian referensi teori pendekatan AI, perbaikan struktur \textit{object detection pipeline}, dan \textit{formatting} dokumen.
+    \item \textbf{Tingkat ketergantungan:} Rendah (estimasi $\sim$20\% output berasal dari AI).
     \item \textbf{Pernyataan:} Saya memahami dan dapat mempertanggungjawabkan setiap baris kode/teks yang saya klaim sebagai bagian saya.
 \end{itemize}
 
 %-------------------- Anggota 3 ---------------------------------------------
-\section{[Nama Anggota 3] -- NPM. [xxxxxxxxxx]}
+\section{Nelson Laurensius -- NPM. 2306161845}
 
 \subsection*{IV.3.1 Komponen yang Dikerjakan}
+Daftar konkret bagian proyek yang menjadi tanggung jawab penuh saya:
 \begin{itemize}[leftmargin=*]
-    \item \textbf{Kode/modul:} [\ldots]
-    \item \textbf{Bagian arsitektur:} [\ldots]
-    \item \textbf{Bagian analisis:} [\ldots]
-    \item \textbf{Bagian laporan:} [\ldots]
+    \item \textbf{Kode/modul:} Mengimplementasikan skrip evaluasi metrik menggunakan pustaka \texttt{torchmetrics} untuk menghitung nilai \textit{Mean Average Precision} (mAP).
+    \item \textbf{Bagian arsitektur:} Mengembangkan pipa otomatisasi pemrosesan JSON untuk menghasilkan dokumen \textit{metadata} proyek yang terstruktur.
+    \item \textbf{Bagian analisis:} Mengumpulkan hasil evaluasi kuantitatif (mAP@[0.5:0.95] dan mAP@0.50) dan membandingkan kinerja model antar setiap \textit{epoch}.
+    \item \textbf{Bagian laporan:} Menyusun berkas \texttt{metadata.json} (Lampiran A) secara utuh dan memformat referensi daftar pustaka.
 \end{itemize}
 
 \subsection*{IV.3.2 Pernyataan Penggunaan AI \textit{Assistant}}
 \begin{itemize}[leftmargin=*]
-    \item \textbf{Tool yang dipakai:} [\ldots]
-    \item \textbf{Untuk bagian apa:} [\ldots]
-    \item \textbf{Tingkat ketergantungan:} [\ldots]
+    \item \textbf{Tool yang dipakai:} Gemini.
+    \item \textbf{Untuk bagian apa:} Bantuan penyusunan struktur \textit{metadata} (JSON) proyek , \textit{debugging environment} NumPy saat evaluasi metrik, dan \textit{formatting} kode LaTeX.
+    \item \textbf{Tingkat ketergantungan:} Rendah (estimasi $\sim$20\% output berasal dari AI).
     \item \textbf{Pernyataan:} Saya memahami dan dapat mempertanggungjawabkan setiap baris kode/teks yang saya klaim sebagai bagian saya.
 \end{itemize}
 
-%-------------------- Anggota 4 (jika ada, hapus jika hanya 3 anggota) ------
-% \section{[Nama Anggota 4] -- NPM. [xxxxxxxxxx]}
-% [\ldots gandakan blok di atas \ldots]
+%-------------------- Anggota 4 ---------------------------------------------
+\section{Wesley Frederick Oh -- NPM. 2306202763}
+
+\subsection*{IV.4.1 Komponen yang Dikerjakan}
+Daftar konkret bagian proyek yang menjadi tanggung jawab penuh saya:
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Kode/modul:} Menulis skrip \textit{inference} untuk pengujian model dan visualisasi hasil akhir, termasuk fungsi untuk menggambar \textit{bounding box} beserta label pada gambar \textit{Test Set}.
+    \item \textbf{Bagian arsitektur:} Mengkalibrasi parameter pada tahap \textit{post-processing}, secara spesifik menyesuaikan \textit{Non-Maximum Suppression} (NMS) \textit{threshold} di angka 0.4 untuk mencegah deteksi ganda pada area wajah.
+    \item \textbf{Bagian analisis:} Melakukan analisis kualitatif dan \textit{error analysis} untuk mengidentifikasi penyebab klasifikasi yang salah (\textit{false positives} dan masalah pencahayaan).
+    \item \textbf{Bagian laporan:} Menulis seluruh Bab III (Implementasi \& Hasil Eksperimen), Bab IV (Pembagian Tugas), serta mengatur format kompilasi akhir LaTeX.
+\end{itemize}
+
+\subsection*{IV.4.2 Pernyataan Penggunaan AI \textit{Assistant}}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Tool yang dipakai:} Gemini.
+    \item \textbf{Untuk bagian apa:} Bantuan penyusunan draf narasi latar belakang dan perbaikan tata bahasa, serta \textit{formatting} struktur laporan akhir menggunakan LaTeX.
+    \item \textbf{Tingkat ketergantungan:} Rendah (estimasi $\sim$20\% output berasal dari AI).
+    \item \textbf{Pernyataan:} Saya memahami dan dapat mempertanggungjawabkan setiap baris kode/teks yang saya klaim sebagai bagian saya.
+\end{itemize}
+
 
 %==============================================================================
 % BAB V - KESIMPULAN & PEKERJAAN LANJUTAN
@@ -748,17 +825,268 @@ Tempelkan isi berkas \texttt{metadata.json} yang juga dikumpulkan terpisah. Berk
 
 \begin{lstlisting}[language=json]
 {
-  "kode_kelompok": "K00",
-  "topik_pilihan": 0,
-  "judul_proyek": "...",
+  "kode_kelompok": "K02",
+  "topik_pilihan": 1,
+  "nama_topik": "Convolutional Neural Network (CNN)",
+  "judul_proyek": "VisionGuard: Real-Time Driver Drowsiness Detection menggunakan Faster R-CNN",
+
+  "abstrak_singkat": "VisionGuard merupakan sistem Driver Drowsiness Detection berbasis computer vision yang dikembangkan menggunakan arsitektur Faster R-CNN dengan backbone ResNet-50 FPN untuk mendeteksi kondisi kantuk pengemudi secara real-time. Dataset utama yang digunakan adalah NTHU Driver Drowsiness Detection (NTHU-DDD) Multi-Class yang terdiri dari 66.521 gambar dengan 4 kelas object detection yaitu notdrowsy, sleepyCombination, slowBlinkWithNodding, dan yawning. Pipeline sistem mencakup preprocessing citra, ekstraksi bounding box otomatis menggunakan HSV masking, augmentasi gambar menggunakan Albumentations, training Faster R-CNN menggunakan pretrained COCO weights, serta evaluasi performa menggunakan Mean Average Precision (mAP). Model terbaik berhasil mencapai validation mAP sebesar 0.8785 dan test mAP@0.50 sebesar 0.9343. Hasil pengujian menunjukkan bahwa Faster R-CNN mampu melakukan lokalisasi dan klasifikasi kondisi kantuk pengemudi secara akurat pada berbagai kondisi pencahayaan dan variasi wajah.",
+
+  "metode_ai": [
+    {
+      "nama": "Faster R-CNN",
+      "peran": "utama",
+      "varian": "Faster R-CNN dengan backbone ResNet-50 FPN pretrained COCO",
+      "catatan": "Digunakan sebagai arsitektur utama object detection untuk mendeteksi kondisi kantuk pengemudi."
+    }
+  ],
+
+  "frameworks": [
+    {
+      "nama": "PyTorch",
+      "versi": "2.2.2",
+      "kegunaan": "Framework utama deep learning dan training Faster R-CNN"
+    },
+    {
+      "nama": "Torchvision",
+      "versi": "0.17.2",
+      "kegunaan": "Pretrained Faster R-CNN ResNet50 FPN dan object detection utilities"
+    },
+    {
+      "nama": "Albumentations",
+      "versi": "1.4",
+      "kegunaan": "Image augmentation dan preprocessing object detection"
+    },
+    {
+      "nama": "OpenCV",
+      "versi": "4.12",
+      "kegunaan": "HSV masking, image processing, contour detection, dan visualisasi bounding box"
+    },
+    {
+      "nama": "torchmetrics",
+      "versi": "1.4",
+      "kegunaan": "Perhitungan Mean Average Precision (mAP) object detection"
+    },
+    {
+      "nama": "Scikit-learn",
+      "versi": "1.5",
+      "kegunaan": "Classification report dan confusion matrix"
+    },
+    {
+      "nama": "Matplotlib",
+      "versi": "3.10",
+      "kegunaan": "Visualisasi dataset, training history, dan hasil inference"
+    },
+    {
+      "nama": "pycocotools",
+      "versi": "2.0.11",
+      "kegunaan": "Utilities evaluasi object detection format COCO"
+    }
+  ],
+
+  "datasets": [
+    {
+      "nama": "NTHU Driver Drowsiness Detection Dataset (NTHU-DDD)",
+      "tipe": "publik",
+      "sumber": "Kaggle / National Tsing Hua University",
+      "url_sumber_publik": "https://www.kaggle.com/datasets/samymesbah/nthu-dataset-ddd-multi-class",
+      "jumlah_sampel": 66521,
+      "jumlah_kelas": 4,
+      "proses_akuisisi_mandiri": "",
+      "peran_di_proyek": "Dataset utama untuk training, validation, dan testing sistem deteksi kantuk pengemudi berbasis object detection.",
+      "spek_rl": null
+    },
+    {
+      "nama": "COCO Pretrained Weights",
+      "tipe": "publik",
+      "sumber": "Microsoft COCO Dataset",
+      "url_sumber_publik": "https://cocodataset.org/",
+      "jumlah_sampel": 118000,
+      "jumlah_kelas": 80,
+      "proses_akuisisi_mandiri": "",
+      "peran_di_proyek": "Pretrained weights Faster R-CNN ResNet-50 FPN untuk transfer learning.",
+      "spek_rl": null
+    }
+  ],
+
+  "metrik_utama": [
+    "Mean Average Precision (mAP)",
+    "mAP@0.5:0.95",
+    "mAP@0.50",
+    "Training Loss",
+    "Validation Loss",
+    "Confusion Matrix"
+  ],
+
+  "klaim_bonus": [],
+
   "anggota": [
     {
-      "nama": "...",
-      "npm": "...",
-      "konsep_dikuasai_implementasi": ["..."],
-      "konsep_dikuasai_teori": ["..."]
+      "nama": "Benedict Aurelius",
+      "npm": "2306209095",
+      "peran_utama": "Lead Model Engineer",
+      "focus_area": [
+        "Training pipeline Faster R-CNN",
+        "Hyperparameter tuning",
+        "Transfer learning",
+        "Model evaluation"
+      ],
+      "konsep_dikuasai_implementasi": [
+        "Training loop Faster R-CNN menggunakan PyTorch",
+        "Konfigurasi optimizer SGD dan scheduler StepLR",
+        "Inisialisasi Faster R-CNN ResNet-50 FPN pretrained COCO",
+        "Checkpoint saving dan logging history training",
+        "mAP evaluation menggunakan torchmetrics"
+      ],
+      "konsep_dikuasai_teori": [
+        "Region Proposal Network (RPN)",
+        "Feature Pyramid Network (FPN)",
+        "Object detection architecture",
+        "Transfer learning",
+        "Intersection over Union (IoU)"
+      ],
+      "bagian_laporan": [
+        "Bab II",
+        "Bab III.2",
+        "Bab III.5"
+      ],
+      "bagian_kode": [
+        "Training loop",
+        "Model initialization",
+        "Optimizer dan scheduler",
+        "Evaluation pipeline"
+      ]
+    },
+
+    {
+      "nama": "Deandro Najwan Ahmad Syahbanna",
+      "npm": "2306213174",
+      "peran_utama": "Dataset & Preprocessing Engineer",
+      "focus_area": [
+        "Bounding box extraction",
+        "Dataset preprocessing",
+        "PyTorch Dataset pipeline",
+        "Augmentation"
+      ],
+      "konsep_dikuasai_implementasi": [
+        "HSV masking bounding box extraction",
+        "Custom PyTorch Dataset dan DataLoader",
+        "Albumentations augmentation pipeline",
+        "Dataset stratification 75:15:10",
+        "Image preprocessing dan inpainting annotation box"
+      ],
+      "konsep_dikuasai_teori": [
+        "Bounding box annotation",
+        "Image preprocessing untuk object detection",
+        "Dataset balancing",
+        "Computer vision preprocessing",
+        "Image augmentation"
+      ],
+      "bagian_laporan": [
+        "Bab I",
+        "Bab V"
+      ],
+      "bagian_kode": [
+        "Bounding box extraction",
+        "Dataset preprocessing",
+        "DataLoader pipeline",
+        "Augmentation pipeline"
+      ]
+    },
+
+    {
+      "nama": "Nelson Laurensius",
+      "npm": "2306161845",
+      "peran_utama": "Metadata & Configuration Engineer",
+      "focus_area": [
+        "Metadata configuration",
+        "Experiment configuration",
+        "Class mapping",
+        "Repository management"
+      ],
+      "konsep_dikuasai_implementasi": [
+        "Metadata JSON configuration",
+        "Training configuration setup",
+        "Class mapping Faster R-CNN",
+        "Threshold configuration",
+        "Repository structure management"
+      ],
+      "konsep_dikuasai_teori": [
+        "Mean Average Precision (mAP)",
+        "Background class pada Faster R-CNN",
+        "Non-Maximum Suppression (NMS)",
+        "Object detection workflow",
+        "Experiment reproducibility"
+      ],
+      "bagian_laporan": [
+        "Lampiran Metadata",
+        "Referensi dan formatting"
+      ],
+      "bagian_kode": [
+        "metadata.json",
+        "Configuration setup",
+        "Class mapping system"
+      ]
+    },
+
+    {
+      "nama": "Wesley Frederick Oh",
+      "npm": "2306202763",
+      "peran_utama": "Visualization & Analysis Engineer",
+      "focus_area": [
+        "Inference visualization",
+        "Error analysis",
+        "Confusion matrix",
+        "Post-processing"
+      ],
+      "konsep_dikuasai_implementasi": [
+        "Inference visualization",
+        "Bounding box rendering",
+        "Confusion matrix plotting",
+        "NMS threshold tuning",
+        "Prediction analysis"
+      ],
+      "konsep_dikuasai_teori": [
+        "Inference pipeline",
+        "Detection confidence score",
+        "False positive analysis",
+        "Object detection post-processing",
+        "Error analysis"
+      ],
+      "bagian_laporan": [
+        "Bab III",
+        "Bab IV"
+      ],
+      "bagian_kode": [
+        "Inference script",
+        "Visualization pipeline",
+        "Prediction rendering",
+        "Error analysis"
+      ]
     }
-  ]
+  ],
+
+  "tautan": {
+    "github": "https://github.com/Deann7/FinalProject_CNN_Kel02_KecerdasanBuatan-01",
+    "colab": "",
+    "dataset_mandiri": null,
+    "video_demo": null
+  },
+
+  "ai_assistant_usage": {
+    "digunakan": true,
+    "tools": [
+      "Gemini",
+    ],
+    "bagian": [
+      "Debugging environment Python dan dependency NumPy",
+      "Review struktur metadata JSON",
+      "Formatting LaTeX dan dokumentasi",
+      "Review konfigurasi Faster R-CNN",
+      "Perbaikan struktur laporan"
+    ],
+    "estimasi_persentase": 10
+  }
 }
 \end{lstlisting}
 
@@ -812,7 +1140,13 @@ Each member completes their personal block on the following pages --- one page p
 %----------------------------------------------------------------------------
 % DEFINISI MACRO - PER MEMBER (dengan parameter tanda tangan)
 %----------------------------------------------------------------------------
-\newcommand{\memberBlock}[5]{%
+
+\def\opsiA{A}
+\def\opsiB{B}
+\def\opsiC{C}
+
+\newcommand{\memberBlock}[6]{
+\def\pilihanMember{#6}
 \newpage
 \section*{Individual Consent --- Member #1}
 
@@ -830,9 +1164,9 @@ I have read Sections C.1--C.4 and understood their contents. I voluntarily choos
 \vspace{0.5em}
 
 \begin{itemize}[leftmargin=2em, itemsep=0.8em]
-    \item[$\boxtimes$] \textbf{Option A --- Full Participation.} I consent to the use of my report, metadata, \textbf{and} the audio and video recordings of my oral examination for research purposes.
-    \item[$\square$] \textbf{Option B --- Limited Participation.} I consent to the use of my report, metadata, and audio recording, \textbf{but I do not consent to the video recording} of my oral examination being used for research. (The video recording will be deleted after the academic assessment is completed.)
-    \item[$\square$] \textbf{Option C --- Decline Participation.} I decline to participate in the research. (The academic oral examination proceeds as usual; there is no consequence to the grade.)
+    \item[\ifx\pilihanMember\opsiA $\boxtimes$ \else $\square$ \fi] \textbf{Option A --- Full Participation.} I consent to the use of my report, metadata, \textbf{and} the audio and video recordings of my oral examination for research purposes.
+    \item[\ifx\pilihanMember\opsiB $\boxtimes$ \else $\square$ \fi] \textbf{Option B --- Limited Participation.} I consent to the use of my report, metadata, and audio recording, \textbf{but I do not consent to the video recording} of my oral examination being used for research. (The video recording will be deleted after the academic assessment is completed.)
+    \item[\ifx\pilihanMember\opsiC $\boxtimes$ \else $\square$ \fi] \textbf{Option C --- Decline Participation.} I decline to participate in the research. (The academic oral examination proceeds as usual; there is no consequence to the grade.)
 \end{itemize}
 
 \vfill
@@ -848,17 +1182,16 @@ I have read Sections C.1--C.4 and understood their contents. I voluntarily choos
 \vspace{1em}
 }
 
-%----------------------------------------------------------------------------
-% PEMANGGILAN MACRO — {No}{Nama}{NPM}{Email}{Path Tanda Tangan}
-%----------------------------------------------------------------------------
 
-\memberBlock{1}{Benedict Aurelius}{2306209095}{aurelius1908@gmail.com}{memberSign/benedict.jpeg}
+% Ganti macro: \memberBlock{No}{Nama}{NPM}{Email}{Path Tanda Tangan}{A/B/C}
 
-\memberBlock{2}{Deandro Najwan Ahmad Syahbanna}{2306213174}{deandronas@gmail.com}{memberSign/TandaTangan_DeadnroNajwanAhmadSyahbanna.png}
+\memberBlock{1}{Benedict Aurelius}{2306209095}{aurelius1908@gmail.com}{memberSign/benedict.jpeg}{B}
 
-\memberBlock{3}{Nelson Laurensius}{2306161845}{nelsonlaurensius1234@gmail.com}{memberSign/nelson.jpeg}
+\memberBlock{2}{Deandro Najwan Ahmad Syahbanna}{2306213174}{deandronas@gmail.com}{memberSign/TandaTangan_DeadnroNajwanAhmadSyahbanna.png}{A}
 
-\memberBlock{4}{Wesley Frederick Oh}{2306202763}{pempekplg3@gmail.com}{memberSign/wesley.jpeg}
+\memberBlock{3}{Nelson Laurensius}{2306161845}{nelsonlaurensius1234@gmail.com}{memberSign/nelson.jpeg}{A}
+
+\memberBlock{4}{Wesley Frederick Oh}{2306202763}{pempekplg3@gmail.com}{memberSign/wesley.jpeg}{B}
 
 \end{document}
 

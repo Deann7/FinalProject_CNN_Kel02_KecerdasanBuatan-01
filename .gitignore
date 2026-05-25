@@ -15,3 +15,5 @@ checkpoints/
 *.xdv
 *.bbl
 *.blg
+consent-form.pdf
+consent-form.tex
