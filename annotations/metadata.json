@@ -1,20 +1,264 @@
 {
-    "metadata_version": "1.0",
-    "timestamp": "2026-05-20 23:36:48",
-    "dataset_name": "NTHU-DDD",
-    "total_images": 66521,
-    "num_classes_total": 5,
-    "num_object_classes": 4,
-    "classes": {
-        "notdrowsy": 1,
-        "sleepyCombination": 2,
-        "slowBlinkWithNodding": 3,
-        "yawning": 4
+  "kode_kelompok": "K02",
+  "topik_pilihan": 1,
+  "nama_topik": "Convolutional Neural Network (CNN)",
+  "judul_proyek": "VisionGuard: Real-Time Driver Drowsiness Detection menggunakan Faster R-CNN",
+
+  "abstrak_singkat": "VisionGuard merupakan sistem Driver Drowsiness Detection berbasis computer vision yang dikembangkan menggunakan arsitektur Faster R-CNN dengan backbone ResNet-50 FPN untuk mendeteksi kondisi kantuk pengemudi secara real-time. Dataset utama yang digunakan adalah NTHU Driver Drowsiness Detection (NTHU-DDD) Multi-Class yang terdiri dari 66.521 gambar dengan 4 kelas object detection yaitu notdrowsy, sleepyCombination, slowBlinkWithNodding, dan yawning. Pipeline sistem mencakup preprocessing citra, ekstraksi bounding box otomatis menggunakan HSV masking, augmentasi gambar menggunakan Albumentations, training Faster R-CNN menggunakan pretrained COCO weights, serta evaluasi performa menggunakan Mean Average Precision (mAP). Model terbaik berhasil mencapai validation mAP sebesar 0.8785 dan test mAP@0.50 sebesar 0.9343. Hasil pengujian menunjukkan bahwa Faster R-CNN mampu melakukan lokalisasi dan klasifikasi kondisi kantuk pengemudi secara akurat pada berbagai kondisi pencahayaan dan variasi wajah.",
+
+  "metode_ai": [
+    {
+      "nama": "Faster R-CNN",
+      "peran": "utama",
+      "varian": "Faster R-CNN dengan backbone ResNet-50 FPN pretrained COCO",
+      "catatan": "Digunakan sebagai arsitektur utama object detection untuk mendeteksi kondisi kantuk pengemudi."
+    }
+  ],
+
+  "frameworks": [
+    {
+      "nama": "PyTorch",
+      "versi": "2.2.2",
+      "kegunaan": "Framework utama deep learning dan training Faster R-CNN"
     },
-    "image_size": 640,
-    "model_architecture": "fasterrcnn_resnet50_fpn",
-    "seed": 42,
-    "batch_size": 4,
-    "score_threshold": 0.5,
-    "nms_threshold": 0.4
+    {
+      "nama": "Torchvision",
+      "versi": "0.17.2",
+      "kegunaan": "Pretrained Faster R-CNN ResNet50 FPN dan object detection utilities"
+    },
+    {
+      "nama": "Albumentations",
+      "versi": "1.4",
+      "kegunaan": "Image augmentation dan preprocessing object detection"
+    },
+    {
+      "nama": "OpenCV",
+      "versi": "4.12",
+      "kegunaan": "HSV masking, image processing, contour detection, dan visualisasi bounding box"
+    },
+    {
+      "nama": "torchmetrics",
+      "versi": "1.4",
+      "kegunaan": "Perhitungan Mean Average Precision (mAP) object detection"
+    },
+    {
+      "nama": "Scikit-learn",
+      "versi": "1.5",
+      "kegunaan": "Classification report dan confusion matrix"
+    },
+    {
+      "nama": "Matplotlib",
+      "versi": "3.10",
+      "kegunaan": "Visualisasi dataset, training history, dan hasil inference"
+    },
+    {
+      "nama": "pycocotools",
+      "versi": "2.0.11",
+      "kegunaan": "Utilities evaluasi object detection format COCO"
+    }
+  ],
+
+  "datasets": [
+    {
+      "nama": "NTHU Driver Drowsiness Detection Dataset (NTHU-DDD)",
+      "tipe": "publik",
+      "sumber": "Kaggle / National Tsing Hua University",
+      "url_sumber_publik": "https://www.kaggle.com/datasets/samymesbah/nthu-dataset-ddd-multi-class",
+      "jumlah_sampel": 66521,
+      "jumlah_kelas": 4,
+      "proses_akuisisi_mandiri": "",
+      "peran_di_proyek": "Dataset utama untuk training, validation, dan testing sistem deteksi kantuk pengemudi berbasis object detection.",
+      "spek_rl": null
+    },
+    {
+      "nama": "COCO Pretrained Weights",
+      "tipe": "publik",
+      "sumber": "Microsoft COCO Dataset",
+      "url_sumber_publik": "https://cocodataset.org/",
+      "jumlah_sampel": 118000,
+      "jumlah_kelas": 80,
+      "proses_akuisisi_mandiri": "",
+      "peran_di_proyek": "Pretrained weights Faster R-CNN ResNet-50 FPN untuk transfer learning.",
+      "spek_rl": null
+    }
+  ],
+
+  "metrik_utama": [
+    "Mean Average Precision (mAP)",
+    "mAP@0.5:0.95",
+    "mAP@0.50",
+    "Training Loss",
+    "Validation Loss",
+    "Confusion Matrix"
+  ],
+
+  "klaim_bonus": [],
+
+  "anggota": [
+    {
+      "nama": "Benedict Aurelius",
+      "npm": "2306209095",
+      "peran_utama": "Lead Model Engineer",
+      "focus_area": [
+        "Training pipeline Faster R-CNN",
+        "Hyperparameter tuning",
+        "Transfer learning",
+        "Model evaluation"
+      ],
+      "konsep_dikuasai_implementasi": [
+        "Training loop Faster R-CNN menggunakan PyTorch",
+        "Konfigurasi optimizer SGD dan scheduler StepLR",
+        "Inisialisasi Faster R-CNN ResNet-50 FPN pretrained COCO",
+        "Checkpoint saving dan logging history training",
+        "mAP evaluation menggunakan torchmetrics"
+      ],
+      "konsep_dikuasai_teori": [
+        "Region Proposal Network (RPN)",
+        "Feature Pyramid Network (FPN)",
+        "Object detection architecture",
+        "Transfer learning",
+        "Intersection over Union (IoU)"
+      ],
+      "bagian_laporan": [
+        "Bab II",
+        "Bab III.2",
+        "Bab III.5"
+      ],
+      "bagian_kode": [
+        "Training loop",
+        "Model initialization",
+        "Optimizer dan scheduler",
+        "Evaluation pipeline"
+      ]
+    },
+
+    {
+      "nama": "Deandro Najwan Ahmad Syahbanna",
+      "npm": "2306213174",
+      "peran_utama": "Dataset & Preprocessing Engineer",
+      "focus_area": [
+        "Bounding box extraction",
+        "Dataset preprocessing",
+        "PyTorch Dataset pipeline",
+        "Augmentation"
+      ],
+      "konsep_dikuasai_implementasi": [
+        "HSV masking bounding box extraction",
+        "Custom PyTorch Dataset dan DataLoader",
+        "Albumentations augmentation pipeline",
+        "Dataset stratification 75:15:10",
+        "Image preprocessing dan inpainting annotation box"
+      ],
+      "konsep_dikuasai_teori": [
+        "Bounding box annotation",
+        "Image preprocessing untuk object detection",
+        "Dataset balancing",
+        "Computer vision preprocessing",
+        "Image augmentation"
+      ],
+      "bagian_laporan": [
+        "Bab I",
+        "Bab V"
+      ],
+      "bagian_kode": [
+        "Bounding box extraction",
+        "Dataset preprocessing",
+        "DataLoader pipeline",
+        "Augmentation pipeline"
+      ]
+    },
+
+    {
+      "nama": "Nelson Laurensius",
+      "npm": "2306161845",
+      "peran_utama": "Metadata & Configuration Engineer",
+      "focus_area": [
+        "Metadata configuration",
+        "Experiment configuration",
+        "Class mapping",
+        "Repository management"
+      ],
+      "konsep_dikuasai_implementasi": [
+        "Metadata JSON configuration",
+        "Training configuration setup",
+        "Class mapping Faster R-CNN",
+        "Threshold configuration",
+        "Repository structure management"
+      ],
+      "konsep_dikuasai_teori": [
+        "Mean Average Precision (mAP)",
+        "Background class pada Faster R-CNN",
+        "Non-Maximum Suppression (NMS)",
+        "Object detection workflow",
+        "Experiment reproducibility"
+      ],
+      "bagian_laporan": [
+        "Lampiran Metadata",
+        "Referensi dan formatting"
+      ],
+      "bagian_kode": [
+        "metadata.json",
+        "Configuration setup",
+        "Class mapping system"
+      ]
+    },
+
+    {
+      "nama": "Wesley Frederick Oh",
+      "npm": "2306202763",
+      "peran_utama": "Visualization & Analysis Engineer",
+      "focus_area": [
+        "Inference visualization",
+        "Error analysis",
+        "Confusion matrix",
+        "Post-processing"
+      ],
+      "konsep_dikuasai_implementasi": [
+        "Inference visualization",
+        "Bounding box rendering",
+        "Confusion matrix plotting",
+        "NMS threshold tuning",
+        "Prediction analysis"
+      ],
+      "konsep_dikuasai_teori": [
+        "Inference pipeline",
+        "Detection confidence score",
+        "False positive analysis",
+        "Object detection post-processing",
+        "Error analysis"
+      ],
+      "bagian_laporan": [
+        "Bab III",
+        "Bab IV"
+      ],
+      "bagian_kode": [
+        "Inference script",
+        "Visualization pipeline",
+        "Prediction rendering",
+        "Error analysis"
+      ]
+    }
+  ],
+
+  "tautan": {
+    "github": "https://github.com/Deann7/FinalProject_CNN_Kel02_KecerdasanBuatan-01",
+    "colab": "",
+    "dataset_mandiri": null,
+    "video_demo": null
+  },
+
+  "ai_assistant_usage": {
+    "digunakan": true,
+    "tools": [
+      "Gemini"
+    ],
+    "bagian": [
+      "Debugging environment Python dan dependency NumPy",
+      "Review struktur metadata JSON",
+      "Formatting LaTeX dan dokumentasi",
+      "Review konfigurasi Faster R-CNN",
+      "Perbaikan struktur laporan"
+    ],
+    "estimasi_persentase": 10
+  }
 }
