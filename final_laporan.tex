@@ -1140,7 +1140,13 @@ Each member completes their personal block on the following pages --- one page p
 %----------------------------------------------------------------------------
 % DEFINISI MACRO - PER MEMBER (dengan parameter tanda tangan)
 %----------------------------------------------------------------------------
-\newcommand{\memberBlock}[5]{%
+
+\def\opsiA{A}
+\def\opsiB{B}
+\def\opsiC{C}
+
+\newcommand{\memberBlock}[6]{
+\def\pilihanMember{#6}
 \newpage
 \section*{Individual Consent --- Member #1}
 
@@ -1158,9 +1164,9 @@ I have read Sections C.1--C.4 and understood their contents. I voluntarily choos
 \vspace{0.5em}
 
 \begin{itemize}[leftmargin=2em, itemsep=0.8em]
-    \item[$\boxtimes$] \textbf{Option A --- Full Participation.} I consent to the use of my report, metadata, \textbf{and} the audio and video recordings of my oral examination for research purposes.
-    \item[$\square$] \textbf{Option B --- Limited Participation.} I consent to the use of my report, metadata, and audio recording, \textbf{but I do not consent to the video recording} of my oral examination being used for research. (The video recording will be deleted after the academic assessment is completed.)
-    \item[$\square$] \textbf{Option C --- Decline Participation.} I decline to participate in the research. (The academic oral examination proceeds as usual; there is no consequence to the grade.)
+    \item[\ifx\pilihanMember\opsiA $\boxtimes$ \else $\square$ \fi] \textbf{Option A --- Full Participation.} I consent to the use of my report, metadata, \textbf{and} the audio and video recordings of my oral examination for research purposes.
+    \item[\ifx\pilihanMember\opsiB $\boxtimes$ \else $\square$ \fi] \textbf{Option B --- Limited Participation.} I consent to the use of my report, metadata, and audio recording, \textbf{but I do not consent to the video recording} of my oral examination being used for research. (The video recording will be deleted after the academic assessment is completed.)
+    \item[\ifx\pilihanMember\opsiC $\boxtimes$ \else $\square$ \fi] \textbf{Option C --- Decline Participation.} I decline to participate in the research. (The academic oral examination proceeds as usual; there is no consequence to the grade.)
 \end{itemize}
 
 \vfill
@@ -1176,17 +1182,16 @@ I have read Sections C.1--C.4 and understood their contents. I voluntarily choos
 \vspace{1em}
 }
 
-%----------------------------------------------------------------------------
-% PEMANGGILAN MACRO — {No}{Nama}{NPM}{Email}{Path Tanda Tangan}
-%----------------------------------------------------------------------------
 
-\memberBlock{1}{Benedict Aurelius}{2306209095}{aurelius1908@gmail.com}{memberSign/benedict.jpeg}
+% Ganti macro: \memberBlock{No}{Nama}{NPM}{Email}{Path Tanda Tangan}{A/B/C}
 
-\memberBlock{2}{Deandro Najwan Ahmad Syahbanna}{2306213174}{deandronas@gmail.com}{memberSign/TandaTangan_DeadnroNajwanAhmadSyahbanna.png}
+\memberBlock{1}{Benedict Aurelius}{2306209095}{aurelius1908@gmail.com}{memberSign/benedict.jpeg}{B}
 
-\memberBlock{3}{Nelson Laurensius}{2306161845}{nelsonlaurensius1234@gmail.com}{memberSign/nelson.jpeg}
+\memberBlock{2}{Deandro Najwan Ahmad Syahbanna}{2306213174}{deandronas@gmail.com}{memberSign/TandaTangan_DeadnroNajwanAhmadSyahbanna.png}{A}
 
-\memberBlock{4}{Wesley Frederick Oh}{2306202763}{pempekplg3@gmail.com}{memberSign/wesley.jpeg}
+\memberBlock{3}{Nelson Laurensius}{2306161845}{nelsonlaurensius1234@gmail.com}{memberSign/nelson.jpeg}{A}
+
+\memberBlock{4}{Wesley Frederick Oh}{2306202763}{pempekplg3@gmail.com}{memberSign/wesley.jpeg}{B}
 
 \end{document}
 
